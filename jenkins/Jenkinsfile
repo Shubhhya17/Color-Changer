@@ -1,0 +1,25 @@
+pipeline {
+    agent any 
+    stages {
+        stage('Build') {
+            steps {
+                script {
+                    // Build Docker image
+                    sh 'docker build -t my-app .'
+                }
+            }
+        }
+        stage('Deploy') {
+            steps {
+                script {
+                    // Stop and remove existing container if it exists
+                    sh 'docker stop my-app || true && docker rm my-app || true'
+                    
+                    
+                    // Run Docker container on the application server
+                    sh 'docker run -d --name my-app -p 80:80 my-app'
+                }
+            }
+        }
+    }
+}
